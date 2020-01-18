@@ -9,9 +9,6 @@ import { Wrapper } from './styles/App';
 import DevForm from './components/DevForm';
 import DevList from './components/DevList';
 
-import DevForm from './components/DevForm';
-import DevList from './components/DevList';
-
 function App() {
   return (
     <Provider store={store}>
