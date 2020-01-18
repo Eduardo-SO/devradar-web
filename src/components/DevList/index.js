@@ -1,33 +1,31 @@
 import React from 'react';
-import './styles.css'
+import { useSelector } from 'react-redux';
 
-export default function DevList() {
+import { List } from './styles'
+
+function DevList() {
+    const devs = useSelector(state => state.dev);
+
     return(
-        <div id="dev-list">
+        <List>
             <ul>
-                <li className="dev-item">
-                    <header>
-                        <img src="https://avatars0.githubusercontent.com/u/28929274?v=4" alt="Imagem"/>    
-                        <div className="dev-info">
-                            <strong>nome</strong>
-                            <span>descricao</span>
-                        </div>
-                    </header>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa laborum minima iusto dolor exercitationem neque repellendus, accusantium in quod praesentium.</p>
-                    <a href="#asda">Teste</a>
-                </li>
-                <li className="dev-item">
-                    <header>
-                        <img src="https://avatars0.githubusercontent.com/u/28929274?v=4" alt="Imagem"/>    
-                        <div className="dev-info">
-                            <strong>nome</strong>
-                            <span>descricao</span>
-                        </div>
-                    </header>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa laborum minima iusto dolor exercitationem neque repellendus, accusantium in quod praesentium.</p>
-                    <a href="#asda">Teste</a>
-                </li>
+                {devs.map(dev => (
+                    <li key={dev._id} className="dev-item">
+                        <header>
+                            <img src="https://avatars0.githubusercontent.com/u/28929274?v=4" alt="Imagem"/>    
+                            <div className="dev-info">
+                                <strong>{dev.name}</strong>
+                                <span>{dev.github_username} • {dev.techs}</span>
+                            </div>
+                        </header>
+                        <p>{dev.bio}</p>
+                        <a href={`https://github.com/users/${dev.github_username}`}>Ver Mais</a>
+                    </li>
+                ))}
             </ul>
-        </div>
+        </List>
     )
 }
+
+
+export default DevList;

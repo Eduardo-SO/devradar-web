@@ -1,36 +1,105 @@
-import React from 'react';
-import './styles.css';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-export default function DevForm() {
+import api from '../../services/api'
+import { Form } from './styles';
+
+function DevForm() {
+    const [ github_username, setGithubusername ] = useState('');
+    const [ techs, setTechs ] = useState('');
+    const [ latitude, setLatitude ] = useState('');
+    const [ longitude, setLongitude ] = useState('');
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const {latitude, longitude} = position.coords;
+
+                setLatitude(latitude);
+                setLongitude(longitude);
+            },
+            (err) => {
+                console.log(err);
+            },
+            {
+                timeout: 30000,
+            }
+        )
+    }, [])
+
+    async function handleAddDev(e) {
+        e.preventDefault();
+
+        const response = await api.post('/devs', {
+            github_username,
+            techs,
+            latitude,
+            longitude
+        })
+
+        const { data: dev } = response;
+        
+        dispatch({
+            type:'ADD_DEV',
+            dev
+        })
+    }
+
   return (
-      <div id="dev-form">
+      <Form>
           <strong>Cadastrar</strong>
       
-        <form>
+        <form onSubmit={handleAddDev}>
         <div className="input-block">
             <label htmlFor="github-user">Usuário do Github</label>
-            <input type="text" name="github-user" id="github-user" />
+            <input 
+                type="text"
+                name="github-user"
+                id="github-user"
+                onChange={(e) => setGithubusername(e.target.value)}
+            />
         </div>
 
         <div className="input-block">
             <label htmlFor="techs">Tecnologias</label>
-            <input type="text" name="techs" id="techs" />
+            <input 
+                type="text" 
+                name="techs" 
+                id="techs" 
+                onChange={(e) => setTechs(e.target.value)}
+            />
         </div>
 
         <div className="input-group">
             <div className="input-block">
             <label htmlFor="latitude">Latitude</label>
-            <input type="number" name="latitude" id="latitude" />
+            <input 
+                type="number" 
+                name="latitude" 
+                id="latitude"
+                onChange={(e) => setLatitude(e.target.value)}
+                value={latitude}
+            />
             </div>
 
             <div className="input-block">
             <label htmlFor="longitude">Longitude</label>
-            <input type="number" name="longitude" id="longitude" />
+            <input 
+                type="number" 
+                name="longitude" 
+                id="longitude" 
+                onChange={(e) => setLongitude(e.target.value)}
+                value={longitude}
+            />
             </div>
         </div>
 
         <button type="submit">Salvar</button>
         </form>
-    </div>
+    </Form>
   );
 }
+
+export default DevForm;
