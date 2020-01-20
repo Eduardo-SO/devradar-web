@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux';
 import api from '../../services/api'
 import { Form } from './styles';
 
-function DevForm() {
+function DevForm() {    
+    const dispatch = useDispatch();
+
     const [ github_username, setGithubusername ] = useState('');
     const [ techs, setTechs ] = useState('');
     const [ latitude, setLatitude ] = useState('');
     const [ longitude, setLongitude ] = useState('');
-
-    const dispatch = useDispatch();
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
@@ -29,6 +29,7 @@ function DevForm() {
         )
     }, [])
 
+    
     async function handleAddDev(e) {
         e.preventDefault();
 
@@ -39,7 +40,7 @@ function DevForm() {
             longitude
         })
 
-        const { data: dev } = response;
+        const dev = response.data;
         
         dispatch({
             type:'ADD_DEV',

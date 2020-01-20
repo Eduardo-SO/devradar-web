@@ -1,6 +1,7 @@
 import { produce } from 'immer'
 
-const INITIAL_STATE = [];
+const INITIAL_STATE = [
+];
 
 function DevReducer(state = INITIAL_STATE, action){
     switch(action.type) {

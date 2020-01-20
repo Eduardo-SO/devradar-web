@@ -62,4 +62,8 @@ export const Form = styled.div`
             background: #6931ca;
         }
     }
+
+    @media(max-width: 1000px) {
+        width: 80%;
+    }
 `
